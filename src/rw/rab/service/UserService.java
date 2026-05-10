@@ -20,4 +20,5 @@ public interface UserService extends Remote{
     public String deleteUser(User user) throws RemoteException;
     public List<User> getAllUsers() throws RemoteException;
     public User getUserById(User user) throws RemoteException;
+    public User login(User user) throws RemoteException;
 }
