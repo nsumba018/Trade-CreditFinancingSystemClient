@@ -5,7 +5,11 @@
  */
 package rw.rab.view;
 
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import javax.swing.JOptionPane;
 import rw.rab.model.User;
+import rw.rab.service.UserService;
 
 /**
  *
@@ -108,6 +112,11 @@ public class OtpVerificationPage extends javax.swing.JFrame {
 
         verifyOtp.setBackground(new java.awt.Color(29, 95, 165));
         verifyOtp.setText("Verify OTP");
+        verifyOtp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                verifyOtpActionPerformed(evt);
+            }
+        });
 
         resendOtp.setText("Resend OTP");
         resendOtp.addActionListener(new java.awt.event.ActionListener() {
@@ -170,12 +179,73 @@ public class OtpVerificationPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void resendOtpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resendOtpActionPerformed
-        // TODO add your handling code here:
+        try {
+        Registry registry = LocateRegistry.getRegistry("127.0.0.1", 3000);
+        UserService userService = (UserService) registry.lookup("user");
+
+        String result = userService.resendOtp(loggedInUser);
+
+        JOptionPane.showMessageDialog(this,
+            result,
+            "OTP Resent",
+            JOptionPane.INFORMATION_MESSAGE);
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+            "Cannot connect to server: " + e.getMessage(),
+            "Connection Error",
+            JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_resendOtpActionPerformed
 
     private void otpFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_otpFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_otpFieldActionPerformed
+
+    private void verifyOtpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verifyOtpActionPerformed
+        try{
+            String enteredOtp = otpField.getText().trim();
+            
+            if(enteredOtp.isEmpty()){
+                JOptionPane.showMessageDialog(this, 
+                        "Please enter the OTP Code", 
+                        "Validation Error", 
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if(enteredOtp.length() != 6){
+                JOptionPane.showMessageDialog(this, 
+                        "OTp must be 6 digits", 
+                        "Validation Error", 
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            Registry registry = LocateRegistry.getRegistry("127.0.0.1", 3000);
+            UserService userService = (UserService)registry.lookup("user");
+            
+            String result = userService.verifyOtp(loggedInUser, enteredOtp);
+            
+            if(result.equals("Success")){
+                JOptionPane.showMessageDialog(this, "Login Successful", "Welcome", JOptionPane.INFORMATION_MESSAGE);
+                //open dashboard based on the user
+                
+                if(loggedInUser.getRole().equals("ADMIN")){
+                    new DashboardPage(loggedInUser).setVisible(true);
+                }else if(loggedInUser.getRole().equals("SME")){
+                    new DashboardPage(loggedInUser).setVisible(true);
+                }else if(loggedInUser.getRole().equals("INVESTOR")){
+                    new DashboardPage(loggedInUser).setVisible(true);
+                }
+                this.dispose();
+            }else{
+                JOptionPane.showMessageDialog(this, result, "Verification failed", JOptionPane.ERROR_MESSAGE);
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this, "Cannot connect to server", "Connection Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_verifyOtpActionPerformed
 
     /**
      * @param args the command line arguments
