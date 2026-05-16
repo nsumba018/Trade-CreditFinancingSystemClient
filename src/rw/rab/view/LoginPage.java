@@ -162,7 +162,7 @@ public class LoginPage extends javax.swing.JFrame {
             
             //connecting to the RMI registry
             Registry registry = LocateRegistry.getRegistry("127.0.0.1", 3000);
-            UserService userService = (UserService)registry.lookup(username);
+            UserService userService = (UserService)registry.lookup("user");
             
             // calling the login on the server
             

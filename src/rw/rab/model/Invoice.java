@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 public class Invoice implements Serializable{
-    
+    private static final long serialVersionUID = 1L;
     private int invoiceId;
     private String invoiceNumber;
     private double amount;

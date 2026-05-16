@@ -11,6 +11,7 @@ import java.util.List;
  */
 
 public class Investor implements Serializable{
+    private static final long serialVersionUID = 1L;
     private int investorId;
     private String fullName;
     private String phone;

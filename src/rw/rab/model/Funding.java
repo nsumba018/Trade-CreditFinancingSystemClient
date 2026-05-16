@@ -10,6 +10,7 @@ import java.util.Date;
  */
 
 public class Funding implements Serializable{
+    private static final long serialVersionUID = 1L;
     private int fundingId;
     private double fundedAmount;
     private Date fundedDate;
