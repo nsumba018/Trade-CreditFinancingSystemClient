@@ -32,20 +32,20 @@ public class ReportsPage extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        invoiceReport = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        usersExportPdfBtn = new javax.swing.JButton();
+        invoiceExportCsvBtn = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        invoiceExportPdfBtn = new javax.swing.JButton();
+        fundingExportCsvBtn = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        fundingExportPdfBtn = new javax.swing.JButton();
+        usersExportCsvBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,8 +78,8 @@ public class ReportsPage extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTable1.setFont(new java.awt.Font("DejaVu Sans", 0, 12)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        invoiceReport.setFont(new java.awt.Font("DejaVu Sans", 0, 12)); // NOI18N
+        invoiceReport.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -90,7 +90,7 @@ public class ReportsPage extends javax.swing.JFrame {
                 "Invoice#", "SME", "Amount", "Issue Date", "Status"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(invoiceReport);
 
         jLabel6.setText("Preview-Invoice Report");
 
@@ -99,17 +99,17 @@ public class ReportsPage extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Ubuntu Sans", 0, 10)); // NOI18N
         jLabel8.setText("All Invoices with Status");
 
-        jButton2.setText("Export PDF");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        usersExportPdfBtn.setText("Export PDF");
+        usersExportPdfBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                usersExportPdfBtnActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Export CSV");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        invoiceExportCsvBtn.setText("Export CSV");
+        invoiceExportCsvBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                invoiceExportCsvBtnActionPerformed(evt);
             }
         });
 
@@ -118,17 +118,17 @@ public class ReportsPage extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Ubuntu Sans", 0, 10)); // NOI18N
         jLabel10.setText("All Funding Transactions");
 
-        jButton4.setText("Export PDF");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        invoiceExportPdfBtn.setText("Export PDF");
+        invoiceExportPdfBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                invoiceExportPdfBtnActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Export CSV");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        fundingExportCsvBtn.setText("Export CSV");
+        fundingExportCsvBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                fundingExportCsvBtnActionPerformed(evt);
             }
         });
 
@@ -137,17 +137,17 @@ public class ReportsPage extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("Ubuntu Sans", 0, 10)); // NOI18N
         jLabel12.setText("All Users Report");
 
-        jButton6.setText("Export PDF");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        fundingExportPdfBtn.setText("Export PDF");
+        fundingExportPdfBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                fundingExportPdfBtnActionPerformed(evt);
             }
         });
 
-        jButton7.setText("Export CSV");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        usersExportCsvBtn.setText("Export CSV");
+        usersExportCsvBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                usersExportCsvBtnActionPerformed(evt);
             }
         });
 
@@ -167,9 +167,9 @@ public class ReportsPage extends javax.swing.JFrame {
                             .addComponent(jLabel6)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(27, 27, 27)
-                                .addComponent(jButton4)
+                                .addComponent(invoiceExportPdfBtn)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton3)))
+                                .addComponent(invoiceExportCsvBtn)))
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(60, 60, 60)
@@ -189,13 +189,13 @@ public class ReportsPage extends javax.swing.JFrame {
                 .addGap(61, 61, 61))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(262, 262, 262)
-                .addComponent(jButton6)
+                .addComponent(fundingExportPdfBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton5)
+                .addComponent(fundingExportCsvBtn)
                 .addGap(51, 51, 51)
-                .addComponent(jButton2)
+                .addComponent(usersExportPdfBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton7)
+                .addComponent(usersExportCsvBtn)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -214,12 +214,12 @@ public class ReportsPage extends javax.swing.JFrame {
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6)
-                    .addComponent(jButton7))
+                    .addComponent(usersExportPdfBtn)
+                    .addComponent(invoiceExportCsvBtn)
+                    .addComponent(invoiceExportPdfBtn)
+                    .addComponent(fundingExportCsvBtn)
+                    .addComponent(fundingExportPdfBtn)
+                    .addComponent(usersExportCsvBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -243,29 +243,29 @@ public class ReportsPage extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void invoiceExportCsvBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_invoiceExportCsvBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_invoiceExportCsvBtnActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void usersExportPdfBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersExportPdfBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_usersExportPdfBtnActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void invoiceExportPdfBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_invoiceExportPdfBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_invoiceExportPdfBtnActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void fundingExportCsvBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fundingExportCsvBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_fundingExportCsvBtnActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void fundingExportPdfBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fundingExportPdfBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_fundingExportPdfBtnActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void usersExportCsvBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersExportCsvBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_usersExportCsvBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -306,13 +306,12 @@ public class ReportsPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton fundingExportCsvBtn;
+    private javax.swing.JButton fundingExportPdfBtn;
+    private javax.swing.JButton invoiceExportCsvBtn;
+    private javax.swing.JButton invoiceExportPdfBtn;
+    private javax.swing.JTable invoiceReport;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -324,6 +323,7 @@ public class ReportsPage extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JButton usersExportCsvBtn;
+    private javax.swing.JButton usersExportPdfBtn;
     // End of variables declaration//GEN-END:variables
 }

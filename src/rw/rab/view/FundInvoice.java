@@ -32,18 +32,18 @@ public class FundInvoice extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        availableInvoiceTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        amountField = new javax.swing.JTextField();
+        confirmFundingBtn = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        selectedInvoiceField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        myHistroryTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -76,8 +76,8 @@ public class FundInvoice extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTable1.setFont(new java.awt.Font("DejaVu Sans", 0, 12)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        availableInvoiceTable.setFont(new java.awt.Font("DejaVu Sans", 0, 12)); // NOI18N
+        availableInvoiceTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -88,33 +88,33 @@ public class FundInvoice extends javax.swing.JFrame {
                 "ID", "Invoice#", "SME", "Amount", "Issue Date", "Due Date", "Status"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(availableInvoiceTable);
 
         jLabel2.setText("Available Verified Invoices ");
 
         jLabel4.setFont(new java.awt.Font("Ubuntu Sans", 0, 12)); // NOI18N
         jLabel4.setText("Selected Invoice#");
 
-        jTextField1.setFont(new java.awt.Font("DejaVu Sans", 0, 12)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(100, 100, 100));
-        jTextField1.setText("Enter amount");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        amountField.setFont(new java.awt.Font("DejaVu Sans", 0, 12)); // NOI18N
+        amountField.setForeground(new java.awt.Color(100, 100, 100));
+        amountField.setText("Enter amount");
+        amountField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                amountFieldActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Confirmed Funding");
+        confirmFundingBtn.setText("Confirmed Funding");
 
         jLabel5.setFont(new java.awt.Font("Ubuntu Sans", 0, 12)); // NOI18N
         jLabel5.setText("Amount to Fund(RWF)");
 
-        jTextField2.setFont(new java.awt.Font("DejaVu Sans", 0, 12)); // NOI18N
-        jTextField2.setForeground(new java.awt.Color(100, 100, 100));
-        jTextField2.setText("Auto Filled on Selected Invoice");
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        selectedInvoiceField.setFont(new java.awt.Font("DejaVu Sans", 0, 12)); // NOI18N
+        selectedInvoiceField.setForeground(new java.awt.Color(100, 100, 100));
+        selectedInvoiceField.setText("Auto Filled on Selected Invoice");
+        selectedInvoiceField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                selectedInvoiceFieldActionPerformed(evt);
             }
         });
 
@@ -124,14 +124,14 @@ public class FundInvoice extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2)
+                    .addComponent(confirmFundingBtn)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(selectedInvoiceField, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(74, 74, 74)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(amountField, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5))))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
@@ -144,10 +144,10 @@ public class FundInvoice extends javax.swing.JFrame {
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(amountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(selectedInvoiceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(confirmFundingBtn)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -155,7 +155,7 @@ public class FundInvoice extends javax.swing.JFrame {
 
         jLabel6.setText("My Funding History");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        myHistroryTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -166,7 +166,7 @@ public class FundInvoice extends javax.swing.JFrame {
                 "ID", "Invoice#", "Amount", "Date"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(myHistroryTable);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -222,13 +222,13 @@ public class FundInvoice extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void amountFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_amountFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_amountFieldActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void selectedInvoiceFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectedInvoiceFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_selectedInvoiceFieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -269,8 +269,10 @@ public class FundInvoice extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField amountField;
+    private javax.swing.JTable availableInvoiceTable;
+    private javax.swing.JButton confirmFundingBtn;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -282,9 +284,7 @@ public class FundInvoice extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTable myHistroryTable;
+    private javax.swing.JTextField selectedInvoiceField;
     // End of variables declaration//GEN-END:variables
 }

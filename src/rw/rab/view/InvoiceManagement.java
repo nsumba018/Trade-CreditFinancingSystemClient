@@ -29,6 +29,11 @@ public class InvoiceManagement extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         connectToServer();
         loadAllInvoices();
+        statusCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statusComboActionPerformed(evt);
+            }
+        });
     }
 
     private void connectToServer() {
@@ -48,7 +53,8 @@ public class InvoiceManagement extends javax.swing.JFrame {
             new String[]{"ID", "Invoice #", "SME", "Amount", 
                          "Issue Date", "Due Date", "Status"}, 0
         );
-        for (Invoice inv : invoices) {
+        for (int i = 0; i < invoices.size(); i++) {
+            Invoice inv = invoices.get(i);
             model.addRow(new Object[]{
                 inv.getInvoiceId(),
                 inv.getInvoiceNumber(),
@@ -440,6 +446,41 @@ public class InvoiceManagement extends javax.swing.JFrame {
             "Error", JOptionPane.ERROR_MESSAGE);
     }
     }//GEN-LAST:event_searchInvoiceBtnActionPerformed
+
+    private void statusComboActionPerformed(java.awt.event.ActionEvent evt) {
+        try {
+            String selected = statusCombo.getSelectedItem().toString();
+            if (selected.equals("All Status")) {
+                loadAllInvoices();
+                return;
+            }
+
+            List<Invoice> invoices = invoiceService.getAllInvoices();
+            DefaultTableModel model = new DefaultTableModel(
+                new String[]{"ID", "Invoice #", "SME", "Amount", "Issue Date", "Due Date", "Status"}, 0
+            );
+            for (int i = 0; i < invoices.size(); i++) {
+                Invoice inv = invoices.get(i);
+                if (inv.getStatus().equals(selected)) {
+                    model.addRow(new Object[]{
+                        inv.getInvoiceId(),
+                        inv.getInvoiceNumber(),
+                        inv.getSme() != null ? inv.getSme().getBusinessName() : "",
+                        inv.getAmount(),
+                        inv.getIssueDate(),
+                        inv.getDueDate(),
+                        inv.getStatus()
+                    });
+                }
+            }
+            invoicesTable.setModel(model);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                "Error: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     /**
      * @param args the command line arguments

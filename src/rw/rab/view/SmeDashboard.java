@@ -17,12 +17,16 @@ public class SmeDashboard extends javax.swing.JFrame {
      * Creates new form AdminDashboard
      */
     private rw.rab.model.User loggedInUser;
-    
+    private rw.rab.service.InvoiceService invoiceService;
+    private rw.rab.service.SmeService smeService;
+
     public SmeDashboard(User user) {
         initComponents();
         this.loggedInUser = user;
         welcomeLabel.setText("Welcome, " + user.getUsername());
         setLocationRelativeTo(null);
+        connectToServer();
+        loadDashboardStats();
     }
 
     /**
@@ -46,25 +50,25 @@ public class SmeDashboard extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        myInvoicesBtn = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        dashboardBtn = new javax.swing.JButton();
+        myInvoiceBtn = new javax.swing.JButton();
+        exportReportsBtn = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        invoicesTable = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        jLabel12 = new javax.swing.JLabel();
+        submittedCount = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
+        verifiedCount = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
-        jLabel18 = new javax.swing.JLabel();
+        fundedCount = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
-        jLabel16 = new javax.swing.JLabel();
+        repaidCount = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
 
         jLabel10.setText("jLabel10");
@@ -150,27 +154,27 @@ public class SmeDashboard extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(8, 80, 65));
 
-        jButton2.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
-        jButton2.setText("Dashboard");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        dashboardBtn.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
+        dashboardBtn.setText("Dashboard");
+        dashboardBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                dashboardBtnActionPerformed(evt);
             }
         });
 
-        myInvoicesBtn.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
-        myInvoicesBtn.setText("My invoices");
-        myInvoicesBtn.addActionListener(new java.awt.event.ActionListener() {
+        myInvoiceBtn.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
+        myInvoiceBtn.setText("My invoices");
+        myInvoiceBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                myInvoicesBtnActionPerformed(evt);
+                myInvoiceBtnActionPerformed(evt);
             }
         });
 
-        jButton6.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
-        jButton6.setText("Export Reports");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        exportReportsBtn.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
+        exportReportsBtn.setText("Export Reports");
+        exportReportsBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                exportReportsBtnActionPerformed(evt);
             }
         });
 
@@ -184,27 +188,27 @@ public class SmeDashboard extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(0, 0, 0)
-                        .addComponent(jButton6))
-                    .addComponent(jButton2)
-                    .addComponent(myInvoicesBtn))
+                        .addComponent(exportReportsBtn))
+                    .addComponent(dashboardBtn)
+                    .addComponent(myInvoiceBtn))
                 .addContainerGap(58, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton2)
+                .addComponent(dashboardBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(myInvoicesBtn)
+                .addComponent(myInvoiceBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton6)
+                .addComponent(exportReportsBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addGap(230, 230, 230))
         );
 
-        jTable2.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        invoicesTable.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
+        invoicesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -215,7 +219,7 @@ public class SmeDashboard extends javax.swing.JFrame {
                 "Invoice#", "Amount", "Due Date", "Status"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(invoicesTable);
 
         jLabel4.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
         jLabel4.setText("Recent Invoices");
@@ -225,7 +229,7 @@ public class SmeDashboard extends javax.swing.JFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200)));
 
-        jLabel12.setText("24");
+        submittedCount.setText("24");
 
         jLabel13.setFont(new java.awt.Font("DejaVu Sans", 0, 12)); // NOI18N
         jLabel13.setText("Submitted");
@@ -241,13 +245,13 @@ public class SmeDashboard extends javax.swing.JFrame {
                         .addComponent(jLabel13))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(34, 34, 34)
-                        .addComponent(jLabel12)))
+                        .addComponent(submittedCount)))
                 .addGap(21, 21, 21))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jLabel12)
+                .addComponent(submittedCount)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel13)
                 .addGap(0, 12, Short.MAX_VALUE))
@@ -255,7 +259,7 @@ public class SmeDashboard extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200)));
 
-        jLabel9.setText("24");
+        verifiedCount.setText("24");
 
         jLabel11.setFont(new java.awt.Font("DejaVu Sans", 0, 12)); // NOI18N
         jLabel11.setText("Verified");
@@ -271,13 +275,13 @@ public class SmeDashboard extends javax.swing.JFrame {
                         .addComponent(jLabel11))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(35, 35, 35)
-                        .addComponent(jLabel9)))
+                        .addComponent(verifiedCount)))
                 .addGap(21, 21, 21))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jLabel9)
+                .addComponent(verifiedCount)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel11)
                 .addGap(0, 12, Short.MAX_VALUE))
@@ -285,7 +289,7 @@ public class SmeDashboard extends javax.swing.JFrame {
 
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200)));
 
-        jLabel18.setText("24");
+        fundedCount.setText("24");
 
         jLabel19.setFont(new java.awt.Font("DejaVu Sans", 0, 12)); // NOI18N
         jLabel19.setText("Funded");
@@ -301,13 +305,13 @@ public class SmeDashboard extends javax.swing.JFrame {
                         .addComponent(jLabel19))
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGap(29, 29, 29)
-                        .addComponent(jLabel18)))
+                        .addComponent(fundedCount)))
                 .addGap(21, 21, 21))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(jLabel18)
+                .addComponent(fundedCount)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel19)
                 .addGap(0, 12, Short.MAX_VALUE))
@@ -315,7 +319,7 @@ public class SmeDashboard extends javax.swing.JFrame {
 
         jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200)));
 
-        jLabel16.setText("24");
+        repaidCount.setText("24");
 
         jLabel17.setFont(new java.awt.Font("DejaVu Sans", 0, 12)); // NOI18N
         jLabel17.setText("Repaid");
@@ -331,13 +335,13 @@ public class SmeDashboard extends javax.swing.JFrame {
                         .addComponent(jLabel17))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(35, 35, 35)
-                        .addComponent(jLabel16)))
+                        .addComponent(repaidCount)))
                 .addGap(21, 21, 21))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(jLabel16)
+                .addComponent(repaidCount)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel17)
                 .addGap(0, 12, Short.MAX_VALUE))
@@ -407,18 +411,80 @@ public class SmeDashboard extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void dashboardBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardBtnActionPerformed
+        loadDashboardStats();
+    }//GEN-LAST:event_dashboardBtnActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    private void exportReportsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportReportsBtnActionPerformed
+        new ReportsPage(loggedInUser).setVisible(true);
+    }//GEN-LAST:event_exportReportsBtnActionPerformed
 
-    private void myInvoicesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_myInvoicesBtnActionPerformed
+    private void myInvoiceBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_myInvoiceBtnActionPerformed
             new MyInvoices(loggedInUser).setVisible(true);
 
-    }//GEN-LAST:event_myInvoicesBtnActionPerformed
+    }//GEN-LAST:event_myInvoiceBtnActionPerformed
+
+    private void connectToServer() {
+        try {
+            java.rmi.registry.Registry registry = java.rmi.registry.LocateRegistry.getRegistry("127.0.0.1", 3000);
+            invoiceService = (rw.rab.service.InvoiceService) registry.lookup("invoice");
+            smeService = (rw.rab.service.SmeService) registry.lookup("sme");
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Cannot connect to server: " + e.getMessage(),
+                "Connection Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void loadDashboardStats() {
+        try {
+            java.util.List<rw.rab.model.Invoice> allInvoices = invoiceService.getAllInvoices();
+
+            java.util.List<rw.rab.model.Invoice> myInvoices = new java.util.ArrayList<rw.rab.model.Invoice>();
+            for (int i = 0; i < allInvoices.size(); i++) {
+                rw.rab.model.Invoice inv = allInvoices.get(i);
+                if (inv.getSme() != null &&
+                    inv.getSme().getUser() != null &&
+                    inv.getSme().getUser().getUserId() == loggedInUser.getUserId()) {
+                    myInvoices.add(inv);
+                }
+            }
+
+            int submitted = 0, verified = 0, funded = 0, repaid = 0;
+            for (int i = 0; i < myInvoices.size(); i++) {
+                String status = myInvoices.get(i).getStatus();
+                if (status.equals("SUBMITTED")) submitted++;
+                else if (status.equals("VERIFIED")) verified++;
+                else if (status.equals("FUNDED")) funded++;
+                else if (status.equals("REPAID")) repaid++;
+            }
+
+            submittedCount.setText(String.valueOf(submitted));
+            verifiedCount.setText(String.valueOf(verified));
+            fundedCount.setText(String.valueOf(funded));
+            repaidCount.setText(String.valueOf(repaid));
+
+            javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(
+                new String[]{"ID", "Invoice #", "Amount", "Due Date", "Status"}, 0
+            );
+            for (int i = 0; i < myInvoices.size(); i++) {
+                rw.rab.model.Invoice inv = myInvoices.get(i);
+                model.addRow(new Object[]{
+                    inv.getInvoiceId(),
+                    inv.getInvoiceNumber(),
+                    inv.getAmount(),
+                    inv.getDueDate(),
+                    inv.getStatus()
+                });
+            }
+            invoicesTable.setModel(model);
+
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Error loading stats: " + e.getMessage(),
+                "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -457,24 +523,22 @@ public class SmeDashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton dashboardBtn;
+    private javax.swing.JButton exportReportsBtn;
+    private javax.swing.JLabel fundedCount;
+    private javax.swing.JTable invoicesTable;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -486,8 +550,10 @@ public class SmeDashboard extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JButton myInvoicesBtn;
+    private javax.swing.JButton myInvoiceBtn;
+    private javax.swing.JLabel repaidCount;
+    private javax.swing.JLabel submittedCount;
+    private javax.swing.JLabel verifiedCount;
     private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
 }

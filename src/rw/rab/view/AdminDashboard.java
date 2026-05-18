@@ -17,11 +17,18 @@ public class AdminDashboard extends javax.swing.JFrame {
      * Creates new form AdminDashboard
      */
     private rw.rab.model.User loggedInUser;
+    private rw.rab.service.SmeService smeService;
+    private rw.rab.service.InvestorService investorService;
+    private rw.rab.service.InvoiceService invoiceService;
+    private rw.rab.service.FundingService fundingService;
+
     public AdminDashboard(User user) {
         initComponents();
         this.loggedInUser = user;
         welcomeLabel.setText("Welcome, " + user.getUsername());
         setLocationRelativeTo(null);
+        connectToServer();
+        loadDashboardStats();
     }
 
     /**
@@ -45,26 +52,26 @@ public class AdminDashboard extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         panel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        dashboardBtn = new javax.swing.JButton();
         manageUsers = new javax.swing.JButton();
         manageInvoicesBtn = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
+        generateReportBtn = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        recentInvoicesTable = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        jLabel12 = new javax.swing.JLabel();
+        smeCount = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        investorsCount = new javax.swing.JLabel();
+        investors = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
-        jLabel18 = new javax.swing.JLabel();
+        invoicesCount = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
-        jLabel16 = new javax.swing.JLabel();
+        fundingCount = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
 
         jLabel10.setText("jLabel10");
@@ -150,11 +157,11 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         panel.setBackground(new java.awt.Color(71, 119, 169));
 
-        jButton2.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
-        jButton2.setText("Dashboard");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        dashboardBtn.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
+        dashboardBtn.setText("Dashboard");
+        dashboardBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                dashboardBtnActionPerformed(evt);
             }
         });
 
@@ -174,11 +181,11 @@ public class AdminDashboard extends javax.swing.JFrame {
             }
         });
 
-        jButton8.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
-        jButton8.setText("Generate Reports");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
+        generateReportBtn.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
+        generateReportBtn.setText("Generate Reports");
+        generateReportBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
+                generateReportBtnActionPerformed(evt);
             }
         });
 
@@ -192,8 +199,8 @@ public class AdminDashboard extends javax.swing.JFrame {
                     .addGroup(panelLayout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(0, 0, 0)
-                        .addComponent(jButton8))
-                    .addComponent(jButton2)
+                        .addComponent(generateReportBtn))
+                    .addComponent(dashboardBtn)
                     .addComponent(manageUsers)
                     .addComponent(manageInvoicesBtn))
                 .addContainerGap(26, Short.MAX_VALUE))
@@ -202,7 +209,7 @@ public class AdminDashboard extends javax.swing.JFrame {
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton2)
+                .addComponent(dashboardBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(manageUsers)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -214,12 +221,12 @@ public class AdminDashboard extends javax.swing.JFrame {
                         .addGap(230, 230, 230))
                     .addGroup(panelLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton8)
+                        .addComponent(generateReportBtn)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
-        jTable2.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        recentInvoicesTable.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
+        recentInvoicesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -230,7 +237,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 "Invoice#", "Sme", "Amount", "Status"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(recentInvoicesTable);
 
         jLabel4.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
         jLabel4.setText("Recent Invoices");
@@ -240,7 +247,7 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200)));
 
-        jLabel12.setText("24");
+        smeCount.setText("24");
 
         jLabel13.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
         jLabel13.setText("Smes");
@@ -253,7 +260,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel12)
+                        .addComponent(smeCount)
                         .addGap(29, 29, 29))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel13)
@@ -262,7 +269,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jLabel12)
+                .addComponent(smeCount)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel13)
                 .addGap(0, 12, Short.MAX_VALUE))
@@ -270,10 +277,10 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200)));
 
-        jLabel9.setText("24");
+        investorsCount.setText("24");
 
-        jLabel11.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
-        jLabel11.setText("Investors");
+        investors.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
+        investors.setText("Investors");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -283,24 +290,24 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel11))
+                        .addComponent(investors))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(35, 35, 35)
-                        .addComponent(jLabel9)))
+                        .addComponent(investorsCount)))
                 .addGap(21, 21, 21))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jLabel9)
+                .addComponent(investorsCount)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel11)
+                .addComponent(investors)
                 .addGap(0, 12, Short.MAX_VALUE))
         );
 
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200)));
 
-        jLabel18.setText("24");
+        invoicesCount.setText("24");
 
         jLabel19.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
         jLabel19.setText("Invoices");
@@ -316,13 +323,13 @@ public class AdminDashboard extends javax.swing.JFrame {
                         .addComponent(jLabel19))
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGap(29, 29, 29)
-                        .addComponent(jLabel18)))
+                        .addComponent(invoicesCount)))
                 .addGap(21, 21, 21))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(jLabel18)
+                .addComponent(invoicesCount)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel19)
                 .addGap(0, 12, Short.MAX_VALUE))
@@ -330,7 +337,7 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200)));
 
-        jLabel16.setText("24");
+        fundingCount.setText("24");
 
         jLabel17.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
         jLabel17.setText("Fundings");
@@ -346,13 +353,13 @@ public class AdminDashboard extends javax.swing.JFrame {
                         .addComponent(jLabel17))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(35, 35, 35)
-                        .addComponent(jLabel16)))
+                        .addComponent(fundingCount)))
                 .addGap(21, 21, 21))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(jLabel16)
+                .addComponent(fundingCount)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel17)
                 .addGap(0, 12, Short.MAX_VALUE))
@@ -423,21 +430,71 @@ public class AdminDashboard extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void dashboardBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardBtnActionPerformed
+        loadDashboardStats();
+    }//GEN-LAST:event_dashboardBtnActionPerformed
 
     private void manageInvoicesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageInvoicesBtnActionPerformed
         new InvoiceManagement().setVisible(true);
     }//GEN-LAST:event_manageInvoicesBtnActionPerformed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton8ActionPerformed
+    private void generateReportBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReportBtnActionPerformed
+        new ReportsPage(loggedInUser).setVisible(true);
+    }//GEN-LAST:event_generateReportBtnActionPerformed
 
     private void manageUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageUsersActionPerformed
         new UserManagement().setVisible(true);
     }//GEN-LAST:event_manageUsersActionPerformed
+
+    private void connectToServer() {
+        try {
+            java.rmi.registry.Registry registry = java.rmi.registry.LocateRegistry.getRegistry("127.0.0.1", 3000);
+            smeService = (rw.rab.service.SmeService) registry.lookup("sme");
+            investorService = (rw.rab.service.InvestorService) registry.lookup("investor");
+            invoiceService = (rw.rab.service.InvoiceService) registry.lookup("invoice");
+            fundingService = (rw.rab.service.FundingService) registry.lookup("funding");
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Cannot connect to server: " + e.getMessage(),
+                "Connection Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void loadDashboardStats() {
+        try {
+            java.util.List<rw.rab.model.Sme> smes = smeService.getAllSmes();
+            smeCount.setText(String.valueOf(smes.size()));
+
+            java.util.List<rw.rab.model.Investor> investors = investorService.getAllInvestors();
+            investorsCount.setText(String.valueOf(investors.size()));
+
+            java.util.List<rw.rab.model.Invoice> invoices = invoiceService.getAllInvoices();
+            invoicesCount.setText(String.valueOf(invoices.size()));
+
+            java.util.List<rw.rab.model.Funding> fundings = fundingService.getAllFundings();
+            fundingCount.setText(String.valueOf(fundings.size()));
+
+            javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(
+                new String[]{"ID", "Invoice #", "SME", "Amount", "Status"}, 0
+            );
+            for (int i = 0; i < invoices.size(); i++) {
+                rw.rab.model.Invoice inv = invoices.get(i);
+                model.addRow(new Object[]{
+                    inv.getInvoiceId(),
+                    inv.getInvoiceNumber(),
+                    inv.getSme() != null ? inv.getSme().getBusinessName() : "",
+                    inv.getAmount(),
+                    inv.getStatus()
+                });
+            }
+            recentInvoicesTable.setModel(model);
+
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Error loading stats: " + e.getMessage(),
+                "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -475,24 +532,23 @@ public class AdminDashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton dashboardBtn;
+    private javax.swing.JLabel fundingCount;
+    private javax.swing.JButton generateReportBtn;
+    private javax.swing.JLabel investors;
+    private javax.swing.JLabel investorsCount;
+    private javax.swing.JLabel invoicesCount;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -503,10 +559,11 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JButton manageInvoicesBtn;
     private javax.swing.JButton manageUsers;
     private javax.swing.JPanel panel;
+    private javax.swing.JTable recentInvoicesTable;
+    private javax.swing.JLabel smeCount;
     private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
 }
