@@ -65,6 +65,7 @@ public class InvestorDashboard extends javax.swing.JFrame {
         dashboardBtn = new javax.swing.JButton();
         invoicesBtn = new javax.swing.JButton();
         exportReportsBtn = new javax.swing.JButton();
+        myBalanceBtn = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         availableInvoiceTable = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
@@ -181,6 +182,13 @@ public class InvestorDashboard extends javax.swing.JFrame {
 
         exportReportsBtn.setText("Export Reports");
 
+        myBalanceBtn.setText("My Balance");
+        myBalanceBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                myBalanceBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -188,11 +196,14 @@ public class InvestorDashboard extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(0, 0, 0)
+                        .addComponent(exportReportsBtn))
                     .addComponent(dashboardBtn)
                     .addComponent(invoicesBtn)
-                    .addComponent(exportReportsBtn))
-                .addContainerGap(66, Short.MAX_VALUE))
+                    .addComponent(myBalanceBtn))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -201,11 +212,16 @@ public class InvestorDashboard extends javax.swing.JFrame {
                 .addComponent(dashboardBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(invoicesBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(exportReportsBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addGap(230, 230, 230))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addComponent(myBalanceBtn)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(exportReportsBtn)))
+                .addGap(214, 214, 214))
         );
 
         availableInvoiceTable.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
@@ -358,8 +374,8 @@ public class InvestorDashboard extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 25, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -387,6 +403,16 @@ public class InvestorDashboard extends javax.swing.JFrame {
         new FundInvoice(loggedInUser).setVisible(true);
     }//GEN-LAST:event_invoicesBtnActionPerformed
 
+    private void myBalanceBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_myBalanceBtnActionPerformed
+        MyBalance balancePage = new MyBalance(loggedInUser);
+        balancePage.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                loadDashboardStats();
+            }
+        });
+        balancePage.setVisible(true);
+    }//GEN-LAST:event_myBalanceBtnActionPerformed
+
     private void connectToServer() {
         try {
             java.rmi.registry.Registry registry = java.rmi.registry.LocateRegistry.getRegistry("127.0.0.1", 3000);
@@ -402,7 +428,7 @@ public class InvestorDashboard extends javax.swing.JFrame {
 
     private void loadDashboardStats() {
         try {
-            rw.rab.model.Investor investor = investorService.getInvestorByUserId(loggedInUser);
+            rw.rab.model.Investor investor = getOrCreateInvestorProfile();
 
             if (investor != null) {
                 balanceCount.setText("RWF " + investor.getAvailableBalance());
@@ -443,6 +469,29 @@ public class InvestorDashboard extends javax.swing.JFrame {
         }
     }
 
+    private rw.rab.model.Investor getOrCreateInvestorProfile() {
+        try {
+            rw.rab.model.Investor investor = investorService.getInvestorByUserId(loggedInUser);
+            if (investor != null) {
+                return investor;
+            }
+
+            rw.rab.model.Investor newInvestor = new rw.rab.model.Investor();
+            newInvestor.setFullName(loggedInUser.getUsername());
+            newInvestor.setPhone("");
+            newInvestor.setAvailableBalance(0);
+            newInvestor.setUser(loggedInUser);
+            investorService.createInvestor(newInvestor);
+
+            return investorService.getInvestorByUserId(loggedInUser);
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Error preparing investor profile: " + e.getMessage(),
+                "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -468,6 +517,8 @@ public class InvestorDashboard extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(InvestorDashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
@@ -508,6 +559,7 @@ public class InvestorDashboard extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JButton myBalanceBtn;
     private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
 }

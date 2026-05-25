@@ -228,6 +228,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="usersExportPdfBtn">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="a5" green="5f" red="18" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Export PDF"/>
           </Properties>
           <Events>
@@ -236,6 +239,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="invoiceExportCsvBtn">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="59" green="9c" red="39" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Export CSV"/>
           </Properties>
           <Events>
@@ -257,6 +263,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="invoiceExportPdfBtn">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="a5" green="5f" red="18" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Export PDF"/>
           </Properties>
           <Events>
@@ -265,6 +274,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="fundingExportCsvBtn">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="59" green="9c" red="39" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Export CSV"/>
           </Properties>
           <Events>
@@ -286,6 +298,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="fundingExportPdfBtn">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="a5" green="5f" red="18" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Export PDF"/>
           </Properties>
           <Events>
@@ -294,6 +309,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="usersExportCsvBtn">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="59" green="9c" red="39" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Export CSV"/>
           </Properties>
           <Events>

@@ -278,6 +278,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="updateUserBtn">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="59" green="9c" red="39" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Update"/>
           </Properties>
           <Events>
@@ -286,6 +289,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="deleteUserBtn">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="1e" green="48" red="c8" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Delete"/>
           </Properties>
           <Events>
@@ -294,6 +300,9 @@
         </Component>
         <Component class="javax.swing.JToggleButton" name="readAllUserBtn">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="31" green="b6" red="40" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Read All"/>
           </Properties>
           <Events>

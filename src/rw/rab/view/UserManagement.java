@@ -10,7 +10,11 @@ import java.rmi.registry.Registry;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import rw.rab.model.Investor;
+import rw.rab.model.Sme;
 import rw.rab.model.User;
+import rw.rab.service.InvestorService;
+import rw.rab.service.SmeService;
 import rw.rab.service.UserService;
 
 /**
@@ -19,6 +23,8 @@ import rw.rab.service.UserService;
  */
 public class UserManagement extends javax.swing.JFrame {
     private UserService userService;
+    private SmeService smeService;
+    private InvestorService investorService;
     /**
      * Creates new form UserManagement
      */
@@ -26,6 +32,10 @@ public class UserManagement extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         connectToServer();
+        addPlaceholder(usernameManageUser, "username");
+        addPlaceholder(emailManageUser, "Email");
+        addPasswordPlaceholder(passwordManageUser, "jPasswordField1");
+        addPlaceholder(searchUser, "Search By ID");
         loadAllUsers();
         usersTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -46,6 +56,8 @@ public class UserManagement extends javax.swing.JFrame {
         try{
             Registry  registry = LocateRegistry.getRegistry("127.0.0.1", 3000);
             userService = (UserService) registry.lookup("user");
+            smeService = (SmeService) registry.lookup("sme");
+            investorService = (InvestorService) registry.lookup("investor");
         }catch(Exception e){
             JOptionPane.showMessageDialog(this, "Cannot connect to server: " + e.getMessage(), "Connection Error", JOptionPane.ERROR_MESSAGE);
             
@@ -187,6 +199,7 @@ public class UserManagement extends javax.swing.JFrame {
             }
         });
 
+        updateUserBtn.setBackground(new java.awt.Color(57, 156, 89));
         updateUserBtn.setText("Update");
         updateUserBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -194,6 +207,7 @@ public class UserManagement extends javax.swing.JFrame {
             }
         });
 
+        deleteUserBtn.setBackground(new java.awt.Color(200, 72, 30));
         deleteUserBtn.setText("Delete");
         deleteUserBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -201,6 +215,7 @@ public class UserManagement extends javax.swing.JFrame {
             }
         });
 
+        readAllUserBtn.setBackground(new java.awt.Color(64, 182, 49));
         readAllUserBtn.setText("Read All");
         readAllUserBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -343,7 +358,10 @@ public class UserManagement extends javax.swing.JFrame {
     private void registerUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerUserBtnActionPerformed
         try{
             //Technical rule 1 - empty field check
-            if(usernameManageUser.getText().trim().isEmpty() || 
+            if(isPlaceholder(usernameManageUser, "username") ||
+                isPlaceholder(emailManageUser, "Email") ||
+                new String(passwordManageUser.getPassword()).trim().equals("jPasswordField1") ||
+                usernameManageUser.getText().trim().isEmpty() || 
                 emailManageUser.getText().trim().isEmpty() ||
                 new String(passwordManageUser.getPassword()).trim().isEmpty()){
                 JOptionPane.showMessageDialog(this,"Username, password and email are required",
@@ -352,10 +370,9 @@ public class UserManagement extends javax.swing.JFrame {
             }
             
             //  Technical rule 2 - email format check
-            if(!emailManageUser.getText().contains("@") ||
-               !emailManageUser.getText().contains(".")){
+            if(!isValidEmail(emailManageUser.getText().trim())){
                 JOptionPane.showMessageDialog(this,
-                        "Please enter a valid email address",
+                        "Please enter a valid real email address",
                         "Validation Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -374,6 +391,8 @@ public class UserManagement extends javax.swing.JFrame {
             user.setRole(roleManageUserCombo.getSelectedItem().toString());
 
             String result = userService.createUser(user);
+            User createdUser = findCreatedUser(user);
+            createProfileForRole(createdUser);
             JOptionPane.showMessageDialog(this,
                 result, "Success", JOptionPane.INFORMATION_MESSAGE);
             loadAllUsers();
@@ -398,10 +417,19 @@ public class UserManagement extends javax.swing.JFrame {
         }
 
         // Technical rule 1 — empty check
-        if (usernameManageUser.getText().trim().isEmpty() ||
+        if (isPlaceholder(usernameManageUser, "username") ||
+            isPlaceholder(emailManageUser, "Email") ||
+            usernameManageUser.getText().trim().isEmpty() ||
             emailManageUser.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this,
                 "Username and email cannot be empty",
+                "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!isValidEmail(emailManageUser.getText().trim())) {
+            JOptionPane.showMessageDialog(this,
+                "Please enter a valid real email address",
                 "Validation Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -410,11 +438,21 @@ public class UserManagement extends javax.swing.JFrame {
         User user = new User();
         user.setUserId(userId);
         user.setUsername(usernameManageUser.getText().trim());
-        user.setPassword(new String(passwordManageUser.getPassword()).trim());
+        String password = new String(passwordManageUser.getPassword()).trim();
+        if (password.equals("jPasswordField1") || password.isEmpty()) {
+            User existing = new User();
+            existing.setUserId(userId);
+            existing = userService.getUserById(existing);
+            if (existing != null) {
+                password = existing.getPassword();
+            }
+        }
+        user.setPassword(password);
         user.setEmail(emailManageUser.getText().trim());
         user.setRole(roleManageUserCombo.getSelectedItem().toString());
 
         String result = userService.updateUser(user);
+        createProfileForRole(user);
         JOptionPane.showMessageDialog(this,
             result, "Success", JOptionPane.INFORMATION_MESSAGE);
         loadAllUsers();
@@ -467,7 +505,7 @@ public class UserManagement extends javax.swing.JFrame {
     private void searchByIdBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchByIdBtnActionPerformed
         try {
         // Technical rule — search field not empty
-        if (searchUser.getText().trim().isEmpty()) {
+        if (isPlaceholder(searchUser, "Search By ID") || searchUser.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this,
                 "Please enter an ID to search",
                 "Validation Error", JOptionPane.ERROR_MESSAGE);
@@ -516,12 +554,118 @@ public class UserManagement extends javax.swing.JFrame {
     private void backToDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToDashboardActionPerformed
         this.dispose();
     }//GEN-LAST:event_backToDashboardActionPerformed
+    private User findCreatedUser(User user) {
+        try {
+            List<User> users = userService.getAllUsers();
+            for (int i = 0; i < users.size(); i++) {
+                User existing = users.get(i);
+                if (existing.getUsername() != null && existing.getEmail() != null &&
+                    existing.getUsername().equals(user.getUsername()) &&
+                    existing.getEmail().equals(user.getEmail())) {
+                    return existing;
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                "User saved, but profile lookup failed: " + e.getMessage(),
+                "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+        return null;
+    }
+
+    private void createProfileForRole(User user) {
+        if (user == null || user.getRole() == null) {
+            return;
+        }
+
+        try {
+            String role = user.getRole().trim();
+            if (role.equalsIgnoreCase("SME")) {
+                Sme existing = smeService.getSmeByUserId(user);
+                if (existing == null) {
+                    Sme sme = new Sme();
+                    sme.setBusinessName(user.getUsername());
+                    sme.setRegistrationNumber("REG-" + user.getUserId());
+                    sme.setPhone("");
+                    sme.setCreditLimit(0);
+                    sme.setUser(user);
+                    smeService.createSme(sme);
+                }
+            } else if (role.equalsIgnoreCase("INVESTOR")) {
+                Investor existing = investorService.getInvestorByUserId(user);
+                if (existing == null) {
+                    Investor investor = new Investor();
+                    investor.setFullName(user.getUsername());
+                    investor.setPhone("");
+                    investor.setAvailableBalance(0);
+                    investor.setUser(user);
+                    investorService.createInvestor(investor);
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                "User saved, but profile creation failed: " + e.getMessage(),
+                "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private void addPlaceholder(final javax.swing.JTextField field, final String placeholder) {
+        field.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (field.getText().equals(placeholder)) {
+                    field.setText("");
+                    field.setForeground(new java.awt.Color(0, 0, 0));
+                }
+            }
+
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (field.getText().trim().isEmpty()) {
+                    field.setText(placeholder);
+                    field.setForeground(new java.awt.Color(100, 100, 100));
+                }
+            }
+        });
+    }
+
+    private void addPasswordPlaceholder(final javax.swing.JPasswordField field, final String placeholder) {
+        field.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (new String(field.getPassword()).equals(placeholder)) {
+                    field.setText("");
+                    field.setForeground(new java.awt.Color(0, 0, 0));
+                }
+            }
+
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (new String(field.getPassword()).trim().isEmpty()) {
+                    field.setText(placeholder);
+                    field.setForeground(new java.awt.Color(100, 100, 100));
+                }
+            }
+        });
+    }
+
+    private boolean isPlaceholder(javax.swing.JTextField field, String placeholder) {
+        return field.getText().trim().equals(placeholder);
+    }
+
+    private boolean isValidEmail(String email) {
+        if (email == null) {
+            return false;
+        }
+        return email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
+    }
+
     private void clearFields() {
-    usernameManageUser.setText("");
-    passwordManageUser.setText("");
-    emailManageUser.setText("");
+    usernameManageUser.setText("username");
+    usernameManageUser.setForeground(new java.awt.Color(100, 100, 100));
+    passwordManageUser.setText("jPasswordField1");
+    passwordManageUser.setForeground(new java.awt.Color(100, 100, 100));
+    emailManageUser.setText("Email");
+    emailManageUser.setForeground(new java.awt.Color(100, 100, 100));
     roleManageUserCombo.setSelectedIndex(0);
-    searchUser.setText("");
+    searchUser.setText("Search By ID");
+    searchUser.setForeground(new java.awt.Color(100, 100, 100));
 }
     /**
      * @param args the command line arguments
@@ -548,6 +692,7 @@ public class UserManagement extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(UserManagement.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */

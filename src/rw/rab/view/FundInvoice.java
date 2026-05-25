@@ -22,6 +22,8 @@ public class FundInvoice extends javax.swing.JFrame {
         this.loggedInUser = user;
         setLocationRelativeTo(null);
         connectToServer();
+        addPlaceholder(amountField, "Enter amount");
+        addPlaceholder(selectedInvoiceField, "Auto Filled on Selected Invoice");
         loadVerifiedInvoices();
         loadMyFundings();
         setupTableClickListener();
@@ -123,6 +125,7 @@ public class FundInvoice extends javax.swing.JFrame {
             }
         });
 
+        confirmFundingBtn.setBackground(new java.awt.Color(24, 95, 165));
         confirmFundingBtn.setText("Confirmed Funding");
 
         jLabel5.setFont(new java.awt.Font("Ubuntu Sans", 0, 12)); // NOI18N
@@ -291,7 +294,7 @@ public class FundInvoice extends javax.swing.JFrame {
 
     private void loadMyFundings() {
         try {
-            rw.rab.model.Investor investor = investorService.getInvestorByUserId(loggedInUser);
+            rw.rab.model.Investor investor = getOrCreateInvestorProfile();
             if (investor == null) return;
 
             java.util.List<rw.rab.model.Funding> fundings = fundingService.getFundingsByInvestorId(investor);
@@ -338,7 +341,7 @@ public class FundInvoice extends javax.swing.JFrame {
                 return;
             }
 
-            if (amountField.getText().trim().isEmpty()) {
+            if (isPlaceholder(amountField, "Enter amount") || amountField.getText().trim().isEmpty()) {
                 javax.swing.JOptionPane.showMessageDialog(this,
                     "Please enter the amount to fund",
                     "Validation Error", javax.swing.JOptionPane.ERROR_MESSAGE);
@@ -362,7 +365,7 @@ public class FundInvoice extends javax.swing.JFrame {
                 return;
             }
 
-            rw.rab.model.Investor investor = investorService.getInvestorByUserId(loggedInUser);
+            rw.rab.model.Investor investor = getOrCreateInvestorProfile();
             if (investor == null) {
                 javax.swing.JOptionPane.showMessageDialog(this,
                     "No investor profile found for this account. Contact admin.",
@@ -396,6 +399,9 @@ public class FundInvoice extends javax.swing.JFrame {
 
             fundingService.createFunding(funding);
 
+            fullInvoice.setStatus("FUNDED");
+            invoiceService.updateInvoice(fullInvoice);
+
             investor.setAvailableBalance(investor.getAvailableBalance() - amount);
             investorService.updateInvestor(investor);
 
@@ -403,8 +409,10 @@ public class FundInvoice extends javax.swing.JFrame {
                 "Funding confirmed successfully! RWF " + amount + " invested.",
                 "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
 
-            selectedInvoiceField.setText("");
-            amountField.setText("");
+            selectedInvoiceField.setText("Auto Filled on Selected Invoice");
+            selectedInvoiceField.setForeground(new java.awt.Color(100, 100, 100));
+            amountField.setText("Enter amount");
+            amountField.setForeground(new java.awt.Color(100, 100, 100));
             selectedInvoiceId = -1;
 
             loadVerifiedInvoices();
@@ -415,6 +423,51 @@ public class FundInvoice extends javax.swing.JFrame {
                 "Error: " + e.getMessage(),
                 "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private rw.rab.model.Investor getOrCreateInvestorProfile() {
+        try {
+            rw.rab.model.Investor investor = investorService.getInvestorByUserId(loggedInUser);
+            if (investor != null) {
+                return investor;
+            }
+
+            rw.rab.model.Investor newInvestor = new rw.rab.model.Investor();
+            newInvestor.setFullName(loggedInUser.getUsername());
+            newInvestor.setPhone("");
+            newInvestor.setAvailableBalance(0);
+            newInvestor.setUser(loggedInUser);
+            investorService.createInvestor(newInvestor);
+
+            return investorService.getInvestorByUserId(loggedInUser);
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Error preparing investor profile: " + e.getMessage(),
+                "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    private void addPlaceholder(final javax.swing.JTextField field, final String placeholder) {
+        field.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (field.getText().equals(placeholder)) {
+                    field.setText("");
+                    field.setForeground(new java.awt.Color(0, 0, 0));
+                }
+            }
+
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (field.getText().trim().isEmpty()) {
+                    field.setText(placeholder);
+                    field.setForeground(new java.awt.Color(100, 100, 100));
+                }
+            }
+        });
+    }
+
+    private boolean isPlaceholder(javax.swing.JTextField field, String placeholder) {
+        return field.getText().trim().equals(placeholder);
     }
 
     /**
@@ -442,6 +495,10 @@ public class FundInvoice extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(FundInvoice.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

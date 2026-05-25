@@ -29,6 +29,9 @@ public class MyInvoices extends javax.swing.JFrame {
         this.loggedInUser = user;
         setLocationRelativeTo(null);
         connectToServer();
+        addPlaceholder(invoiceNoTxt, "username");
+        addPlaceholder(amountTxt, "Amount");
+        addPlaceholder(searchField, "Search By ID");
         loadMyInvoices();
         invoicesTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -133,7 +136,7 @@ public class MyInvoices extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 426, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
@@ -176,6 +179,7 @@ public class MyInvoices extends javax.swing.JFrame {
             }
         });
 
+        updateBtn.setBackground(new java.awt.Color(57, 156, 89));
         updateBtn.setText("Update");
         updateBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -183,6 +187,7 @@ public class MyInvoices extends javax.swing.JFrame {
             }
         });
 
+        deleteBtn.setBackground(new java.awt.Color(200, 72, 30));
         deleteBtn.setText("Delete");
         deleteBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -190,6 +195,7 @@ public class MyInvoices extends javax.swing.JFrame {
             }
         });
 
+        readAllBtn.setBackground(new java.awt.Color(164, 182, 49));
         readAllBtn.setText("Read All");
         readAllBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -235,7 +241,6 @@ public class MyInvoices extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -252,13 +257,16 @@ public class MyInvoices extends javax.swing.JFrame {
                             .addComponent(amountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(28, 28, 28)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(issuedDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(dueDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(19, 19, 19))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
+                                .addComponent(jLabel5)
+                                .addGap(84, 84, 84))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(issuedDate, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(24, 24, 24)
+                                .addComponent(dueDate, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(registerBtn)
                         .addGap(47, 47, 47)
@@ -271,7 +279,10 @@ public class MyInvoices extends javax.swing.JFrame {
                         .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(searchByIdBtn)
-                        .addGap(0, 12, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -307,7 +318,9 @@ public class MyInvoices extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -330,7 +343,9 @@ public class MyInvoices extends javax.swing.JFrame {
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
         try {
         // Technical rule 1 — empty fields
-        if (invoiceNoTxt.getText().trim().isEmpty() ||
+        if (isPlaceholder(invoiceNoTxt, "username") ||
+            isPlaceholder(amountTxt, "Amount") ||
+            invoiceNoTxt.getText().trim().isEmpty() ||
             amountTxt.getText().trim().isEmpty() ||
             issuedDate.getDate() == null ||
             dueDate.getDate() == null) {
@@ -381,12 +396,11 @@ public class MyInvoices extends javax.swing.JFrame {
         }
 
         // Get SME linked to this logged in user
-        Sme mySme = smeService.getSmeByUserId(loggedInUser);
+        Sme mySme = getOrCreateSmeProfile();
 
         if (mySme == null) {
             JOptionPane.showMessageDialog(this,
-                "No SME profile found for this account. " +
-                "Please contact admin.",
+                "No SME profile found for this account. Please contact admin.",
                 "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -433,7 +447,9 @@ public class MyInvoices extends javax.swing.JFrame {
         }
 
         // Technical rule — empty fields
-        if (invoiceNoTxt.getText().trim().isEmpty() ||
+        if (isPlaceholder(invoiceNoTxt, "username") ||
+            isPlaceholder(amountTxt, "Amount") ||
+            invoiceNoTxt.getText().trim().isEmpty() ||
             amountTxt.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this,
                 "Invoice number and amount are required",
@@ -448,7 +464,22 @@ public class MyInvoices extends javax.swing.JFrame {
         Invoice invoice = new Invoice();
         invoice.setInvoiceId(invoiceId);
         invoice.setInvoiceNumber(invoiceNoTxt.getText().trim());
-        invoice.setAmount(Double.parseDouble(amountTxt.getText().trim()));
+        double amount;
+        try {
+            amount = Double.parseDouble(amountTxt.getText().trim());
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this,
+                "Amount must be a valid number",
+                "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (amount <= 0) {
+            JOptionPane.showMessageDialog(this,
+                "Invoice amount must be greater than zero",
+                "Business Rule Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        invoice.setAmount(amount);
         // New — JDateChooser direct date reading
         java.util.Date issue = issuedDate.getDate();
         java.util.Date due = dueDate.getDate();
@@ -459,6 +490,14 @@ public class MyInvoices extends javax.swing.JFrame {
                 "Validation Error", JOptionPane.ERROR_MESSAGE);
             return;
         };
+        if (due.before(issue)) {
+            JOptionPane.showMessageDialog(this,
+                "Due date must be after issue date",
+                "Business Rule Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        invoice.setIssueDate(issue);
+        invoice.setDueDate(due);
         invoice.setStatus("SUBMITTED");
 
         String result = invoiceService.updateInvoice(invoice);
@@ -523,7 +562,7 @@ public class MyInvoices extends javax.swing.JFrame {
 
     private void searchByIdBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchByIdBtnActionPerformed
         try {
-        if (searchField.getText().trim().isEmpty()) {
+        if (isPlaceholder(searchField, "Search By ID") || searchField.getText().trim().isEmpty()) {
             loadMyInvoices();
             return;
         }
@@ -554,12 +593,61 @@ public class MyInvoices extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_searchByIdBtnActionPerformed
 
+    private Sme getOrCreateSmeProfile() {
+        try {
+            Sme sme = smeService.getSmeByUserId(loggedInUser);
+            if (sme != null) {
+                return sme;
+            }
+
+            Sme newSme = new Sme();
+            newSme.setBusinessName(loggedInUser.getUsername());
+            newSme.setRegistrationNumber("REG-" + loggedInUser.getUserId());
+            newSme.setPhone("");
+            newSme.setCreditLimit(0);
+            newSme.setUser(loggedInUser);
+            smeService.createSme(newSme);
+
+            return smeService.getSmeByUserId(loggedInUser);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                "Error preparing SME profile: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    private void addPlaceholder(final javax.swing.JTextField field, final String placeholder) {
+        field.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (field.getText().equals(placeholder)) {
+                    field.setText("");
+                    field.setForeground(new java.awt.Color(0, 0, 0));
+                }
+            }
+
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (field.getText().trim().isEmpty()) {
+                    field.setText(placeholder);
+                    field.setForeground(new java.awt.Color(100, 100, 100));
+                }
+            }
+        });
+    }
+
+    private boolean isPlaceholder(javax.swing.JTextField field, String placeholder) {
+        return field.getText().trim().equals(placeholder);
+    }
+
     private void clearFields() {
-    invoiceNoTxt.setText("");
-    amountTxt.setText("");
-    issuedDate.setDate(null);   // JDateChooser reset
-    dueDate.setDate(null);   
-    searchField.setText("");
+    invoiceNoTxt.setText("username");
+    invoiceNoTxt.setForeground(new java.awt.Color(100, 100, 100));
+    amountTxt.setText("Amount");
+    amountTxt.setForeground(new java.awt.Color(100, 100, 100));
+    issuedDate.setDate(null);
+    dueDate.setDate(null);
+    searchField.setText("Search By ID");
+    searchField.setForeground(new java.awt.Color(100, 100, 100));
 }
     
     /**
@@ -587,6 +675,8 @@ public class MyInvoices extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MyInvoices.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 

@@ -28,6 +28,7 @@ public class InvoiceManagement extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         connectToServer();
+        addPlaceholder(searchInvoiceTxt, "Search By Invoice Number");
         loadAllInvoices();
         statusCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -118,7 +119,7 @@ public class InvoiceManagement extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 381, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
@@ -140,6 +141,7 @@ public class InvoiceManagement extends javax.swing.JFrame {
             }
         });
 
+        markAsFundedBtn.setBackground(new java.awt.Color(57, 156, 89));
         markAsFundedBtn.setText("Mark As Funded");
         markAsFundedBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,6 +149,7 @@ public class InvoiceManagement extends javax.swing.JFrame {
             }
         });
 
+        markAsRepaidBtn.setBackground(new java.awt.Color(200, 72, 30));
         markAsRepaidBtn.setText("Mark As Repaid");
         markAsRepaidBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -154,6 +157,7 @@ public class InvoiceManagement extends javax.swing.JFrame {
             }
         });
 
+        deleteBtn.setBackground(new java.awt.Color(164, 182, 49));
         deleteBtn.setText("Delete");
         deleteBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -199,7 +203,6 @@ public class InvoiceManagement extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -224,6 +227,9 @@ public class InvoiceManagement extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(statusCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -249,7 +255,9 @@ public class InvoiceManagement extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -417,7 +425,7 @@ public class InvoiceManagement extends javax.swing.JFrame {
 
     private void searchInvoiceBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchInvoiceBtnActionPerformed
         try {
-        if (searchInvoiceTxt.getText().trim().isEmpty()) {
+        if (isPlaceholder(searchInvoiceTxt, "Search By Invoice Number") || searchInvoiceTxt.getText().trim().isEmpty()) {
             loadAllInvoices();
             return;
         }
@@ -455,7 +463,7 @@ public class InvoiceManagement extends javax.swing.JFrame {
     private void statusComboActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String selected = statusCombo.getSelectedItem().toString();
-            if (selected.equals("All Status")) {
+            if (selected.equals("ALL STATUS")) {
                 loadAllInvoices();
                 return;
             }
@@ -487,6 +495,28 @@ public class InvoiceManagement extends javax.swing.JFrame {
         }
     }
 
+    private void addPlaceholder(final javax.swing.JTextField field, final String placeholder) {
+        field.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (field.getText().equals(placeholder)) {
+                    field.setText("");
+                    field.setForeground(new java.awt.Color(0, 0, 0));
+                }
+            }
+
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (field.getText().trim().isEmpty()) {
+                    field.setText(placeholder);
+                    field.setForeground(new java.awt.Color(100, 100, 100));
+                }
+            }
+        });
+    }
+
+    private boolean isPlaceholder(javax.swing.JTextField field, String placeholder) {
+        return field.getText().trim().equals(placeholder);
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -512,6 +542,8 @@ public class InvoiceManagement extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(InvoiceManagement.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 

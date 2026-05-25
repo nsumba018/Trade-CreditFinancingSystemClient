@@ -22,6 +22,9 @@ public class LoginPage extends javax.swing.JFrame {
      */
     public LoginPage() {
         initComponents();
+        setLocationRelativeTo(null);
+        addPlaceholder(usernameField, "Enter Your Username");
+        addPasswordPlaceholder(passwordField, "jPasswordField1");
     }
 
     /**
@@ -42,6 +45,8 @@ public class LoginPage extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         passwordField = new javax.swing.JPasswordField();
         loginBtn = new javax.swing.JButton();
+        roleCombo = new javax.swing.JComboBox<>();
+        roleTxt = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(29, 95, 165));
@@ -82,14 +87,14 @@ public class LoginPage extends javax.swing.JFrame {
         jLabel3.setText("Sign in to Your Account");
 
         jLabel4.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(200, 200, 200));
+        jLabel4.setForeground(new java.awt.Color(100, 100, 100));
         jLabel4.setText("Username");
 
         usernameField.setForeground(new java.awt.Color(100, 100, 100));
         usernameField.setText("Enter Your Username");
 
         jLabel5.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(200, 200, 200));
+        jLabel5.setForeground(new java.awt.Color(100, 100, 100));
         jLabel5.setText("Password");
 
         passwordField.setForeground(new java.awt.Color(100, 100, 100));
@@ -104,6 +109,13 @@ public class LoginPage extends javax.swing.JFrame {
             }
         });
 
+        roleCombo.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
+        roleCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ADMIN", "SME", "INVESTOR" }));
+
+        roleTxt.setFont(new java.awt.Font("DejaVu Sans", 0, 15)); // NOI18N
+        roleTxt.setForeground(new java.awt.Color(100, 100, 100));
+        roleTxt.setText("Role");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -115,15 +127,18 @@ public class LoginPage extends javax.swing.JFrame {
                         .addGap(113, 113, 113)
                         .addComponent(jLabel3))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel4)
-                            .addComponent(usernameField, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
-                            .addComponent(jLabel5)
-                            .addComponent(passwordField)))
+                        .addGap(138, 138, 138)
+                        .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(140, 140, 140)
-                        .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(22, 22, 22)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(roleCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel4)
+                                .addComponent(usernameField, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+                                .addComponent(jLabel5)
+                                .addComponent(passwordField))
+                            .addComponent(roleTxt))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -132,17 +147,21 @@ public class LoginPage extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(roleTxt)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(roleCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(loginBtn)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -152,7 +171,14 @@ public class LoginPage extends javax.swing.JFrame {
         try{
             //try to get the values from the fiels
             String username = usernameField.getText().trim();
-            String password = passwordField.getText().trim();
+            String password = new String(passwordField.getPassword()).trim();
+            String selectedRole = roleCombo.getSelectedItem().toString();
+            if (username.equals("Enter Your Username")) {
+                username = "";
+            }
+            if (password.equals("jPasswordField1")) {
+                password = "";
+            }
             
             //validation
             if(username.isEmpty() || password.isEmpty()){
@@ -169,6 +195,7 @@ public class LoginPage extends javax.swing.JFrame {
             User user = new User();
             user.setUsername(username);
             user.setPassword(password);
+            user.setRole(selectedRole);
             
             User loggedIn = userService.login(user);
             
@@ -177,13 +204,51 @@ public class LoginPage extends javax.swing.JFrame {
                 new OtpVerificationPage(loggedIn).setVisible(true);
                 this.dispose();
             }else{
-                JOptionPane.showMessageDialog(this, "Invalid Username or Password", "Login Failed",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                    "Invalid username, password, or role. Please select your registered role.",
+                    "Login Failed", JOptionPane.ERROR_MESSAGE);
             }
             
         }catch(Exception e){
             JOptionPane.showMessageDialog(this, "Cannot connect to Server: " + e.getMessage(), "Connection Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_loginBtnActionPerformed
+
+    private void addPlaceholder(final javax.swing.JTextField field, final String placeholder) {
+        field.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (field.getText().equals(placeholder)) {
+                    field.setText("");
+                    field.setForeground(new java.awt.Color(0, 0, 0));
+                }
+            }
+
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (field.getText().trim().isEmpty()) {
+                    field.setText(placeholder);
+                    field.setForeground(new java.awt.Color(100, 100, 100));
+                }
+            }
+        });
+    }
+
+    private void addPasswordPlaceholder(final javax.swing.JPasswordField field, final String placeholder) {
+        field.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (new String(field.getPassword()).equals(placeholder)) {
+                    field.setText("");
+                    field.setForeground(new java.awt.Color(0, 0, 0));
+                }
+            }
+
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (new String(field.getPassword()).trim().isEmpty()) {
+                    field.setText(placeholder);
+                    field.setForeground(new java.awt.Color(100, 100, 100));
+                }
+            }
+        });
+    }
 
     /**
      * @param args the command line arguments
@@ -211,6 +276,7 @@ public class LoginPage extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(LoginPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -229,6 +295,8 @@ public class LoginPage extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton loginBtn;
     private javax.swing.JPasswordField passwordField;
+    private javax.swing.JComboBox<String> roleCombo;
+    private javax.swing.JLabel roleTxt;
     private javax.swing.JTextField usernameField;
     // End of variables declaration//GEN-END:variables
 }

@@ -16,6 +16,7 @@ public class Investor implements Serializable{
     private String fullName;
     private String phone;
     private double availableBalance;
+    private User user;
   
 
     public Investor() {
@@ -26,6 +27,7 @@ public class Investor implements Serializable{
         this.fullName = fullName;
         this.phone = phone;
         this.availableBalance = availableBalance;
+        this.user = user;
     }
 
         
@@ -59,6 +61,14 @@ public class Investor implements Serializable{
 
     public void setAvailableBalance(double availableBalance) {
         this.availableBalance = availableBalance;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
     
     

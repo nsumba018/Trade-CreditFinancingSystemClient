@@ -110,6 +110,7 @@ public class ReportsPage extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Ubuntu Sans", 0, 10)); // NOI18N
         jLabel8.setText("All Invoices with Status");
 
+        usersExportPdfBtn.setBackground(new java.awt.Color(24, 95, 165));
         usersExportPdfBtn.setText("Export PDF");
         usersExportPdfBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -117,6 +118,7 @@ public class ReportsPage extends javax.swing.JFrame {
             }
         });
 
+        invoiceExportCsvBtn.setBackground(new java.awt.Color(57, 156, 89));
         invoiceExportCsvBtn.setText("Export CSV");
         invoiceExportCsvBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -129,6 +131,7 @@ public class ReportsPage extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Ubuntu Sans", 0, 10)); // NOI18N
         jLabel10.setText("All Funding Transactions");
 
+        invoiceExportPdfBtn.setBackground(new java.awt.Color(24, 95, 165));
         invoiceExportPdfBtn.setText("Export PDF");
         invoiceExportPdfBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -136,6 +139,7 @@ public class ReportsPage extends javax.swing.JFrame {
             }
         });
 
+        fundingExportCsvBtn.setBackground(new java.awt.Color(57, 156, 89));
         fundingExportCsvBtn.setText("Export CSV");
         fundingExportCsvBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -148,6 +152,7 @@ public class ReportsPage extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("Ubuntu Sans", 0, 10)); // NOI18N
         jLabel12.setText("All Users Report");
 
+        fundingExportPdfBtn.setBackground(new java.awt.Color(24, 95, 165));
         fundingExportPdfBtn.setText("Export PDF");
         fundingExportPdfBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -155,6 +160,7 @@ public class ReportsPage extends javax.swing.JFrame {
             }
         });
 
+        usersExportCsvBtn.setBackground(new java.awt.Color(57, 156, 89));
         usersExportCsvBtn.setText("Export CSV");
         usersExportCsvBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -617,6 +623,10 @@ public class ReportsPage extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(ReportsPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

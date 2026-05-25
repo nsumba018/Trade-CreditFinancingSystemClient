@@ -27,6 +27,7 @@ public class OtpVerificationPage extends javax.swing.JFrame {
         initComponents();
         this.loggedInUser = user;
         setLocationRelativeTo(null);
+        addPlaceholder(otpField, "Enter a 6-digit OTP");
     }
 
     /**
@@ -206,6 +207,9 @@ public class OtpVerificationPage extends javax.swing.JFrame {
         try{
             String enteredOtp = otpField.getText().trim();
             
+            if(enteredOtp.equals("Enter a 6-digit OTP")) {
+                enteredOtp = "";
+            }
             if(enteredOtp.isEmpty()){
                 JOptionPane.showMessageDialog(this, 
                         "Please enter the OTP Code", 
@@ -229,15 +233,29 @@ public class OtpVerificationPage extends javax.swing.JFrame {
             
             if(result.equals("SUCCESS")){
                 JOptionPane.showMessageDialog(this, "Login Successful", "Welcome", JOptionPane.INFORMATION_MESSAGE);
-                //open dashboard based on the user
-                
-                if(loggedInUser.getRole().equals("ADMIN")){
-                    new AdminDashboard(loggedInUser).setVisible(true);
-                }else if(loggedInUser.getRole().equals("SME")){
-                    new SmeDashboard(loggedInUser).setVisible(true);
-                }else if(loggedInUser.getRole().equals("INVESTOR")){
-                    new InvestorDashboard(loggedInUser).setVisible(true);
+                String role = loggedInUser.getRole();
+                if (role == null) {
+                    role = "";
                 }
+                role = role.trim();
+
+                javax.swing.JFrame dashboard = null;
+                if(role.equalsIgnoreCase("ADMIN")){
+                    dashboard = new AdminDashboard(loggedInUser);
+                }else if(role.equalsIgnoreCase("SME")){
+                    dashboard = new SmeDashboard(loggedInUser);
+                }else if(role.equalsIgnoreCase("INVESTOR")){
+                    dashboard = new InvestorDashboard(loggedInUser);
+                }
+
+                if (dashboard == null) {
+                    JOptionPane.showMessageDialog(this,
+                        "Unknown user role: " + loggedInUser.getRole(),
+                        "Login Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                dashboard.setVisible(true);
                 this.dispose();
             }else{
                 JOptionPane.showMessageDialog(this, result, "Verification failed", JOptionPane.ERROR_MESSAGE);
@@ -246,6 +264,24 @@ public class OtpVerificationPage extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Cannot connect to server", "Connection Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_verifyOtpActionPerformed
+
+    private void addPlaceholder(final javax.swing.JTextField field, final String placeholder) {
+        field.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (field.getText().equals(placeholder)) {
+                    field.setText("");
+                    field.setForeground(new java.awt.Color(0, 0, 0));
+                }
+            }
+
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (field.getText().trim().isEmpty()) {
+                    field.setText(placeholder);
+                    field.setForeground(new java.awt.Color(100, 100, 100));
+                }
+            }
+        });
+    }
 
     /**
      * @param args the command line arguments
@@ -272,6 +308,7 @@ public class OtpVerificationPage extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(OtpVerificationPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
